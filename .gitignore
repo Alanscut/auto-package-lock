@@ -1,0 +1,13 @@
+/temp/node_modules/
+/temp/package-lock.json
+/node_modules/
+/package-lock.json
+/.idea/auto-package-lock.iml
+/.idea/modules.xml
+/.idea/vcs.xml
+# 默认忽略的文件
+/shelf/
+/workspace.xml
+# 基于编辑器的 HTTP 客户端请求
+/httpRequests/
+/.idea/.gitignore
