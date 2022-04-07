@@ -1,21 +1,19 @@
-#!/usr/bin/env node
+#!usr/bin/env node
+const shell = require('shelljs')
 const utils = require('./utils')
-const fs = require('fs')
+const apkl = require('./auto-package-lock').apkl
+const path = require('path')
 
 const args = require('minimist')(process.argv.slice(2), {
-    string: ["temp_path", "project_path", "module"]
+    string: ["p", "m"]
 });
 
 let exit = false
-if (utils.notExist(args.temp_path)) {
-    console.error('缺少temp路径信息')
-    exit = true
-}
-if (utils.notExist(args.project_path)) {
+if (utils.notExist(args.p)) {
     console.error('缺少project路径信息')
     exit = true
 }
-if (utils.notExist(args.module)) {
+if (utils.notExist(args.m)) {
     console.error('缺少module信息')
     exit = true
 }
@@ -23,114 +21,40 @@ if (exit) {
     return
 }
 
-const temp_path = args.temp_path + '/' + 'package-lock.json'
-const project_path = args.project_path + '/' + 'package-lock.json'
-const targetModule = args.module.split('@')
+shell.cd(args.p)
+const project = shell.pwd().stdout
+const targetModule = args.m.split('@')
+const temp = path.join(__dirname,'temp')
 
-if (targetModule.length > 2) {
-    console.error('依赖包信息错误')
-    return
-}
-const module_name = targetModule[0]
-const module_tag = targetModule[1]
-let temp_data
-let temp_pkl
+const project_path = path.join(project,'package-lock.json')
+const temp_path = path.join(temp,'package-lock.json')
 
-//读取temp目录下的package-lock.json文件，找出目标库的配置信息
-let dependencies_data
-let packages_name
-let packages_data
-try {
-    temp_data = fs.readFileSync(temp_path)
-    temp_pkl = JSON.parse(temp_data.toString())
+console.log('project:',project)
+console.log('module:',targetModule)
+console.log('temp:',temp)
 
-    for (const key in temp_pkl['dependencies']) {
-        if (key === module_name) {
-            dependencies_data = temp_pkl['dependencies'][key]
-        }
-    }
-    if (dependencies_data === undefined) {
-        console.error('temp路径下package-lock.json解析dependencies出错')
-        return
-    }
+//temp目录npm安装module以取得配置信息
+shell.cd(temp)
+shell.exec(`npm install ${args.m}`)
+shell.exec(`npm install --package-lock-only --ignore-scripts`)
 
-    if (temp_pkl['lockfileVersion'] ===2 && temp_pkl['packages'] !== undefined) {
-        for (const key in temp_pkl['packages']) {
-            const temp_key = key.split('/')
-            if (temp_key[temp_key.length - 1] === module_name) {
-                packages_name = key
-                packages_data = temp_pkl['packages'][key]
-            }
-        }
-        if (packages_data === undefined) {
-            console.error('temp路径下package-lock.json解析packages出错')
-        }
-    }
-} catch (err) {
-    console.error('temp路径package-lock.json读取失败', err)
-    return
-}
+//目标project生成package-lock.json
+shell.cd(project)
+shell.exec(`npm install -no-save`)
+shell.exec(`npm install --package-lock-only --ignore-scripts`)
 
-//读取目标项目的package-lock.json文件，将目标库的配置信息修改完毕
-try {
-    temp_data = fs.readFileSync(project_path)
-    temp_pkl = JSON.parse(temp_data.toString())
-    let flag = false
+//修改目标project中package-lock.json配置
+const result = apkl(temp_path,project_path,targetModule)
 
-    for (const key in temp_pkl['dependencies']) {
-        if (key === module_name) {
-            temp_pkl['dependencies'][key] = dependencies_data
-            flag = true
-        }
-        if (temp_pkl['dependencies'][key]['requires'] !== undefined) {
-            if (temp_pkl['dependencies'][key]['requires'][module_name] !== undefined) {
-                temp_pkl['dependencies'][key]['requires'][module_name] = module_tag
-            }
-        }
-    }
-    if (flag) {
-        flag = false
-    } else {
-        console.error('project路径下package-lock.json解析dependencies出错')
-        return
-    }
+//temp目录npm卸载module
+shell.cd(temp)
+shell.exec(`npm uninstall ${targetModule[0]}`)
 
-    if (temp_pkl['lockfileVersion'] ===2 && temp_pkl['packages'] !== undefined && packages_data !== undefined) {
-        if (temp_pkl['packages']['']['dependencies'][module_name] !== undefined){
-            temp_pkl['packages']['']['dependencies'][module_name] = module_tag
-            flag = true
-        }
-        for (const key in temp_pkl['packages']) {
-            if (key === packages_name) {
-                temp_pkl['packages'][key] = packages_data
-                flag = true
-            }
-            if (temp_pkl['packages'][key]['dependencies'] !== undefined) {
-                if (temp_pkl['packages'][key]['dependencies'][module_name] !== undefined) {
-                    temp_pkl['packages'][key]['dependencies'][module_name] = module_tag
-                }
-            }
-        }
-        if (!flag) {
-            console.error('temp路径下package-lock.json解析packages出错')
-            return
-        }
-    }
-} catch (err) {
-    console.error('project路径package-lock.json读取失败\n',err)
-    return
-}
+//目标project更新npm install
+shell.cd(project)
+shell.exec(`npm install -no-save`)
 
-try{
-    fs.writeFileSync(project_path,JSON.stringify(temp_pkl,null,2)+'\n')
-}catch (err){
-    console.error('project路径package-lock.json写入失败\n',err)
-    return
-}
-
-console.log('\npackage-lock配置成功')
-if (temp_pkl['lockfileVersion'] ===1){
-    console.log('使用npm v6及以下版本，后续请务必使用npm install -no-save')
-}else {
-    console.log('使用npm v7及以上版本，后续可使用npm install -no-save 或直接使用 npm install')
+if (result !== undefined){
+    console.log('\npackage-lock配置成功')
+    console.log(result)
 }
