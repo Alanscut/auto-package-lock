@@ -103,13 +103,12 @@ function apkl(temp_path,project_path,targetModule){
         return
     }
 
-    // console.log('\npackage-lock配置成功')
     if (temp_pkl['lockfileVersion'] ===1){
-        return '使用npm v6及以下版本，后续请务必使用npm install -no-save'
-        // console.log('使用npm v6及以下版本，后续请务必使用npm install -no-save')
+        return 1
+    }else if(temp_pkl['lockfileVersion'] ===2){
+        return 2
     }else {
-        return '使用npm v7及以上版本，后续可使用npm install -no-save 或直接使用 npm install'
-        // console.log('使用npm v7及以上版本，后续可使用npm install -no-save 或直接使用 npm install')
+        console.error('package-lock.json文件配置出错，lockfileVersion不为1或2')
     }
 }
 

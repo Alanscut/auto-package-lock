@@ -50,11 +50,16 @@ const result = apkl(temp_path,project_path,targetModule)
 shell.cd(temp)
 shell.exec(`npm uninstall ${targetModule[0]}`)
 
-//目标project更新npm install
-shell.cd(project)
-shell.exec(`npm install -no-save`)
-
-if (result !== undefined){
+if (result === 1){
+    //目标project更新npm install
+    shell.cd(project)
+    shell.exec(`npm install -no-save`)
     console.log('\npackage-lock配置成功')
-    console.log(result)
+    console.log('使用npm v6及以下版本，后续请务必使用npm install -no-save')
+}else {
+    //目标project更新npm install
+    shell.cd(project)
+    shell.exec(`npm install`)
+    console.log('\npackage-lock配置成功')
+    console.log('使用npm v7及以上版本，后续可使用npm install -no-save 或直接使用 npm install')
 }
