@@ -29,10 +29,6 @@ const temp = path.join(__dirname,'temp')
 const project_path = path.join(project,'package-lock.json')
 const temp_path = path.join(temp,'package-lock.json')
 
-console.log('project:',project)
-console.log('module:',targetModule)
-console.log('temp:',temp)
-
 //temp目录npm安装module以取得配置信息
 shell.cd(temp)
 shell.exec(`npm install ${args.m}`)
@@ -45,6 +41,9 @@ shell.exec(`npm install --package-lock-only --ignore-scripts`)
 
 //修改目标project中package-lock.json配置
 const result = apkl(temp_path,project_path,targetModule)
+if (result === undefined){
+    return
+}
 
 //temp目录npm卸载module
 shell.cd(temp)
