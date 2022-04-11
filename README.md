@@ -16,7 +16,7 @@
 - `npx auto-package-lock -p ../demo2 -m deepmerge@4.2.2`
 - `npx auto-package-lock -p /e/projects/js/demo2 -m throttle-debounce@3.0.1`
 
-##注意事项
+## 注意事项
 
 1. npm版本为v6及以下的项目，后续请务必使用`npm install -no-save`安装依赖。
 2. npm版本为v7及以上的项目，后续请使用`npm install`安装依赖
