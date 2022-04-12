@@ -36,7 +36,7 @@ shell.exec(`npm install --package-lock-only --ignore-scripts`)
 
 //目标project生成package-lock.json
 shell.cd(project)
-shell.exec(`npm install -no-save`)
+shell.exec(`npm install --no-save`)
 shell.exec(`npm install --package-lock-only --ignore-scripts`)
 
 //修改目标project中package-lock.json配置
@@ -52,13 +52,13 @@ shell.exec(`npm uninstall ${targetModule[0]}`)
 if (result === 1){
     //目标project更新npm install
     shell.cd(project)
-    shell.exec(`npm install -no-save`)
+    shell.exec(`npm install --no-save`)
     console.log('\npackage-lock配置成功')
-    console.log('使用npm v6及以下版本，后续请务必使用npm install -no-save')
+    console.log('使用npm v6及以下版本，后续请务必使用npm install --no-save')
 }else {
     //目标project更新npm install
     shell.cd(project)
     shell.exec(`npm install`)
     console.log('\npackage-lock配置成功')
-    console.log('使用npm v7及以上版本，后续可使用npm install -no-save 或直接使用 npm install')
+    console.log('使用npm v7及以上版本，后续可使用npm install --no-save 或直接使用 npm install')
 }
