@@ -1,15 +1,21 @@
 {
   "name": "auto-package-lock",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "index.js",
+  "bin": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "format": "prettier --write ../auto-package-lock"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Alan_scut",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Alanscut/auto-package-lock"
+  },
   "dependencies": {
     "minimist": "^1.2.6",
+    "prettier": "^2.6.2",
     "shelljs": "^0.8.5"
   }
 }
