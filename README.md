@@ -8,16 +8,34 @@
 
 ## 用法
 
-1. 使用 npm 安装`npm install -g auto-package-lock`，或克隆项目（下载 release 包）到本地
-2. 使用 npx 运行工具`npx auto-package-lock -p 目标项目路径 -m 指定的库名及版本`
-3. 如果克隆项目本地，将 npx 后面的参数指向本地工具项目地址`npx ./auto-package-lock`
+### npm 安装
+
+1. 使用 npm 安装`npm install -g auto-package-lock`
+2. 使用 node 运行工具`npx auto-package-lock -p 目标项目路径 -m 指定的库名及版本`
 
 举例：
 
-- `npx auto-package-lock -p ../demo2 -m deepmerge@4.2.2`
-- `npx auto-package-lock -p /e/projects/js/demo2 -m throttle-debounce@3.0.1`
+- `node auto-package-lock -p ../demo2 -m deepmerge@4.2.2`
+- `node auto-package-lock -p /e/projects/js/demo2 -m throttle-debounce@3.0.1`
+
+### 本地调用
+
+1. 克隆项目（下载 release 包）到本地
+2. 命令行`cd`进入工具路径，使用 node 运行工具`npx ./index.js -p 目标项目路径 -m 指定的库名及版本`
+
+举例：
+
+- `node ./index.js -p ../demo2 -m deepmerge@4.2.2`
+- `node ./index.js -p /e/projects/js/demo2 -m throttle-debounce@3.0.1`
+
+## 参数
+
+两个必需参数
+
+- -p 目标项目的路径（project_path）
+- -m 想要锁定版本的的库名称及地址（module）
 
 ## 注意事项
 
 1. npm 版本为 v6 及以下的项目，后续请务必使用`npm install --no-save`安装依赖。
-2. npm 版本为 v7 及以上的项目，后续请使用`npm install`安装依赖
+2. npm 版本为 v7 及以上的项目，后续可直接使用`npm install`安装依赖

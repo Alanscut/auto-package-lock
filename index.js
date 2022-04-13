@@ -60,7 +60,5 @@ if (result === 1) {
   shell.cd(project);
   shell.exec(`npm install`);
   console.log("\npackage-lock配置成功");
-  console.log(
-    "使用npm v7及以上版本，后续可使用npm install --no-save 或直接使用 npm install"
-  );
+  console.log("使用npm v7及以上版本，后续可直接使用 npm install");
 }

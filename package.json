@@ -1,9 +1,11 @@
 {
   "name": "auto-package-lock",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "",
   "main": "index.js",
-  "bin": "index.js",
+  "bin": {
+    "auto-package-lock": "./index.js"
+  },
   "scripts": {
     "format": "prettier --write ../auto-package-lock"
   },
