@@ -4,8 +4,12 @@
   "description": "",
   "main": "index.js",
   "bin": {
-    "auto-package-lock": "./index.js"
+    "apkl": "./index.js"
   },
+  "keywords": [
+    "npm",
+    "package"
+  ],
   "scripts": {
     "format": "prettier --write ../auto-package-lock"
   },

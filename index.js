@@ -1,4 +1,5 @@
-#!usr/bin/env node
+#!/usr/bin/env node
+
 const shell = require("shelljs");
 const utils = require("./utils");
 const apkl = require("./auto-package-lock").apkl;

@@ -21,7 +21,8 @@
 ### 本地调用
 
 1. 克隆项目（下载 release 包）到本地
-2. 命令行`cd`进入工具路径，使用 node 运行工具`node ./index.js -p 目标项目路径 -m 指定的库名及版本`
+2. 命令行`cd`进入工具路径，`npm install`
+3. 使用 node 运行工具`node ./index.js -p 目标项目路径 -m 指定的库名及版本`
 
 举例：
 
