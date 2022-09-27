@@ -11,12 +11,12 @@
 ### npm 安装
 
 1. 使用 npm 安装`npm install -g auto-package-lock`
-2. 使用 node 运行工具`node auto-package-lock -p 目标项目路径 -m 指定的库名及版本`
+2. 使用 node 运行工具`node apkl -p 目标项目路径 -m 指定的库名及版本`
 
 举例：
 
-- `node auto-package-lock -p ../demo2 -m deepmerge@4.2.2`
-- `node auto-package-lock -p /e/projects/js/demo2 -m throttle-debounce@3.0.1`
+- `node apkl -p ../demo2 -m deepmerge@4.2.2`
+- `node apkl -p /e/projects/js/demo2 -m throttle-debounce@3.0.1`
 
 ### 本地调用
 
